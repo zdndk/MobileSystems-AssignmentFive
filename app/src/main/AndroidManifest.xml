@@ -15,7 +15,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+        <service
+            android:name=".ActivityMonitorIntentService"
+            android:exported="false" />
     </application>
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
 </manifest>

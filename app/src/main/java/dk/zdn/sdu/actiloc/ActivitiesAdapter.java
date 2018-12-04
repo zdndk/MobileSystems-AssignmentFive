@@ -1,0 +1,67 @@
+package dk.zdn.sdu.actiloc;
+
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+
+import com.google.android.gms.location.DetectedActivity;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class ActivitiesAdapter extends ArrayAdapter<DetectedActivity> {
+
+    public ActivitiesAdapter(@NonNull Context context, int resource) {
+        super(context, resource);
+    }
+
+    ActivitiesAdapter(Context context, ArrayList<DetectedActivity> detectedActivities) {
+        super(context, 0, detectedActivities);
+    }
+
+    @NonNull
+    @Override
+    public View getView(int position, View view, @NonNull ViewGroup parent) {
+
+        DetectedActivity detectedActivity = getItem(position);
+        if (view == null) {
+            view = LayoutInflater.from(getContext()).inflate( R.layout.detected_activity, parent, false);
+        }
+
+        TextView activityName = (TextView) view.findViewById(R.id.activity_type);
+        TextView activityConfidenceLevel = (TextView) view.findViewById(
+                R.id.confidence_percentage);
+
+        if (detectedActivity != null) {
+            activityName.setText(ActivityMonitorIntentService.getActivityString(getContext(), detectedActivity.getType()));
+            activityConfidenceLevel.setText(getContext().getString(R.string.percentage, detectedActivity.getConfidence()));
+        }
+        return view;
+    }
+    //Process the list of detected activities//
+    void updateActivities(ArrayList<DetectedActivity> detectedActivities) {
+        HashMap<Integer, Integer> detectedActivitiesMap = new HashMap<>();
+        for (DetectedActivity activity : detectedActivities) {
+            detectedActivitiesMap.put(activity.getType(), activity.getConfidence());
+        }
+
+        ArrayList<DetectedActivity> temporaryList = new ArrayList<>();
+        for (int i = 0; i < ActivityMonitorIntentService.POSSIBLE_ACTIVITIES.length; i++) {
+            int confidence = detectedActivitiesMap.containsKey(ActivityMonitorIntentService.POSSIBLE_ACTIVITIES[i]) ?
+                    detectedActivitiesMap.get(ActivityMonitorIntentService.POSSIBLE_ACTIVITIES[i]) : 0;
+            temporaryList.add(new
+                    DetectedActivity(ActivityMonitorIntentService.POSSIBLE_ACTIVITIES[i],
+                    confidence));
+        }
+
+        this.clear();
+        for (DetectedActivity detectedActivity: temporaryList) {
+            this.add(detectedActivity);
+        }
+    }
+
+}

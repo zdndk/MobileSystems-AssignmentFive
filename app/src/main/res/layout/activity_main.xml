@@ -13,15 +13,12 @@
             android:id="@+id/activityMonitoringButton"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:onClick="requestUpdatesHandler"
             android:text="Start"
             app:layout_constraintBottom_toBottomOf="parent" />
-
-    <TextView
-        android:id="@+id/activityTextBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Activity"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp" />
+    <ListView
+        android:id="@+id/activitiesListview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </android.support.constraint.ConstraintLayout>
