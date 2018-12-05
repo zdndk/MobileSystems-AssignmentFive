@@ -29,11 +29,18 @@ public class ActivityMonitorIntentService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         if (ActivityRecognitionResult.hasResult(intent)) {
             ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
+            DetectedActivity mostProbableActivity = result.getMostProbableActivity();
             ArrayList<DetectedActivity> detectedActivities = (ArrayList) result.getProbableActivities();
             PreferenceManager.getDefaultSharedPreferences(this)
                     .edit()
                     .putString(MainActivity.DETECTED_ACTIVITY,
                             detectedActivitiesToJson(detectedActivities))
+                    .apply();
+
+            PreferenceManager.getDefaultSharedPreferences(this)
+                    .edit()
+                    .putString(MainActivity.MOST_PROPABLE_ACTIVITY,
+                            mostProbableActivity.toString() + "|" + mostProbableActivity.getConfidence())
                     .apply();
         }
     }

@@ -42,7 +42,7 @@ public class ActivitiesAdapter extends ArrayAdapter<DetectedActivity> {
         }
         return view;
     }
-    //Process the list of detected activities//
+
     void updateActivities(ArrayList<DetectedActivity> detectedActivities) {
         HashMap<Integer, Integer> detectedActivitiesMap = new HashMap<>();
         for (DetectedActivity activity : detectedActivities) {
